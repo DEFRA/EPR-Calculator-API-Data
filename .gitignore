@@ -1,0 +1,9 @@
+api/obj/project.nuget.cache
+/.vs/ProjectEvaluation
+/src/.vs
+/src/bin/Debug
+/src/obj
+/.vs
+/src/EPR.Calculator.API.Data/bin
+/src/EPR.Calculator.API.Data/obj
+/src/EPR.Calculator.API.Data/.vs

@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Calculator.API.Data", "src\EPR.Calculator.API.Data\EPR.Calculator.API.Data.csproj", "{321F202C-2557-4832-B3EA-752C85E0CF23}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{321F202C-2557-4832-B3EA-752C85E0CF23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{321F202C-2557-4832-B3EA-752C85E0CF23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{321F202C-2557-4832-B3EA-752C85E0CF23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{321F202C-2557-4832-B3EA-752C85E0CF23}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
