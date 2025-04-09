@@ -1,6 +1,6 @@
 variables:
-  azureSubscription: 'AZD-RWD-DEV1'
+  azureSubscription: 'AZD-RWD-PRE1'
   docker.imageName: 'eprprnstatusfunction'
-  acr.azureContainerRegistryName: 'devrwdinfac1401'
+  acr.azureContainerRegistryName: 'prerwdinfac1401'
   acr.repositoryName: 'eprprnstatusfunctionrespository'
-  serviceName: 'devrwdwebfa1413'
+  serviceName: 'PRERWDWEBFA1413'
