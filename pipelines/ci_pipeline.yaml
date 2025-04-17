@@ -26,17 +26,16 @@ parameters:
 pool: DEFRA-COMMON-ubuntu2204-SSV3
 
 variables:
-  - template: vars/DEV-development.yaml
   - name: solutionFolder
     value: src
   - name: projectFolder
-    value: 'Epr.Reproccessor.Exporter.Facade'
+    value: 'Epr.Calculator.API.Data'
   - name: testProjectFolder
-    value: 'Epr.Reproccessor.Exporter.Facade.Tests'
+    value: 'Epr.Calculator.API.Data.UnitTests'
   - name: sonarQubeProjectKey
-    value: epr-prn-rep-exp-facade
+    value: EPR-Calculator-API-Data
   - name: sonarQubeProjectName
-    value: epr-prn-rep-exp-facade
+    value:  EPR-Calculator-API-Data
   - name: runNugetTasks
     value: true
   - name: dotnetVersion
@@ -59,11 +58,11 @@ extends:
     sonarQubeProjectName: ${{ variables.sonarQubeProjectName }}
     runTests: ${{ parameters.runTests }}
     runOWASPScan: ${{ parameters.runOWASPScan }}
-    azureSubscription: $(azureSubscription)
-    acrAzureContainerRegistryName: $(acr.azureContainerRegistryName)
-    acrRepositoryName: $(acr.repositoryName)
+    azureSubscription: 'AZD-RWD-DEV1'
+    acrAzureContainerRegistryName: 'DEVRWDINFAC1401'
+    acrRepositoryName: 'testing'
     branchName: ${{ replace(replace(variables['Build.SourceBranch'], 'refs/heads/', ''), '/', '_') }}
     runNugetTasks: ${{ variables.runNugetTasks }}
-    serviceName: $(serviceName)
+    serviceName: ''
     sonarqubeInstance: ${{ parameters.sonarqubeInstance }}
     dotnetVersion: ${{ variables.dotnetVersion }}
