@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection.Emit;
 using EPR.Calculator.API.Data.DataModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -14,7 +13,7 @@ namespace EPR.Calculator.API.Data.TypeConfigurations
         {
             builder.ToTable("default_parameter_setting_master");
 
-            builder.Property(p => p.ParameterYear)
+            builder.Property(p => p.ParameterYearId)
                    .HasColumnName("parameter_year")
                    .IsRequired();
 
@@ -35,9 +34,9 @@ namespace EPR.Calculator.API.Data.TypeConfigurations
                    .IsRequired();
 
             builder.Property(p => p.ParameterFileName)
-                  .HasColumnName("parameter_filename")
-                  .HasMaxLength(256)
-            .IsRequired();
+                   .HasColumnName("parameter_filename")
+                   .HasMaxLength(256)
+                   .IsRequired();
 
             builder.HasMany(e => e.Details)
                    .WithOne(e => e.DefaultParameterSettingMaster)

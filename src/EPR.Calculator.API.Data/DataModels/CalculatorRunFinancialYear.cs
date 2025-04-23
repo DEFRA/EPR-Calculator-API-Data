@@ -1,6 +1,6 @@
 ﻿namespace EPR.Calculator.API.Data.DataModels
 {
-    public record CalculatorRunFinancialYear
+    public class CalculatorRunFinancialYear
     {
         public required string Name { get; set; }
 
