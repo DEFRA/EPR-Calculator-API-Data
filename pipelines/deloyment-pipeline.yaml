@@ -22,15 +22,17 @@ parameters:
     - DEV12
     - DEV13
     - DEV14
-    - DEV15
+    - DEV16
 - name: envToDeploy
   displayName: 'Target Environment to deploy:    (select "development" for DEV 1-11)'
   default: development
   type: string
   values:
     - development
+    - dev15
     - tst
     - preprod
+    - preprod2
     - prod
 - name: imageTag
   displayName: Enter Tag for the Image (Docker tag) or Release name (Git repo tag)
@@ -42,6 +44,10 @@ variables:
     - name: env
       value: DEV1
     - template: vars/${{ parameters.teamName }}-${{ parameters.envToDeploy }}.yaml
+  - ${{ elseif eq(parameters.envToDeploy, 'dev15') }}:
+    - name: env
+      value: DEV15
+    - template: vars/${{ parameters.envToDeploy }}.yaml    
   - ${{ elseif eq(parameters.envToDeploy, 'tst') }}:
     - name: env
       value: TST1
@@ -49,6 +55,10 @@ variables:
   - ${{ elseif eq(parameters.envToDeploy, 'preprod') }}:
     - name: env
       value: PRE1
+    - template: vars/${{ parameters.envToDeploy }}.yaml
+  - ${{ elseif eq(parameters.envToDeploy, 'preprod2') }}:
+    - name: env
+      value: PRE2
     - template: vars/${{ parameters.envToDeploy }}.yaml
   - ${{ elseif eq(parameters.envToDeploy, 'prod') }}:
     - name: env
