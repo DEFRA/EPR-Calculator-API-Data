@@ -1,0 +1,37 @@
+pr: none
+trigger:
+  branches:
+    include:
+    - '*'
+  paths:
+    include:
+    - 'src/EPR.Calculator.API.Data/'  
+
+parameters:
+  - name: solutionFolder
+    default: 'src'
+    values:
+    - 'src'
+
+pool: DEFRA-COMMON-ubuntu2004-SSV3
+
+variables:
+  NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
+  NUGET_PACKAGES: $(Pipeline.Workspace)/.nuget/packages
+
+
+steps:
+  - script: |
+      dotnet --list-sdks
+        echo '{"sdk":{"version":"8.0.303","rollForward":"latestFeature","allowPrerelease":false}}' > ${{ parameters.solutionFolder }}/global.json
+        cat ${{ parameters.solutionFolder }}/global.json
+
+  - template: templates/template-build-test.yaml
+    parameters:
+      versionVariableGroupName: EPR.Common.Calculator.Data.API
+      solutionFolder: src
+      # solutionName: src
+      projectName: EPR.Calculator.API.Data
+      runTests: true
+      # testProjectName: EPR.Common.Functions.Test
+      # versioningScheme: $(versioningScheme)
