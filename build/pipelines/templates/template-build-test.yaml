@@ -37,7 +37,7 @@ steps:
       }
     displayName: Initialize Az CLI ADO Extension
 
-  - ${{ if or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')) }}:
+  - ${{ if or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'), (variables['Build.SourceBranch'], refs/heads/feature/calc-api-data)) }}:
 
     - pwsh: | 
         Set-StrictMode -Version 3.0
