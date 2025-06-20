@@ -122,10 +122,10 @@ steps:
         Write-Host "version: $(Version)"
         Write-Host "configuration: $(configuration)"
         Write-Host "solutionFolder: ${{parameters.solutionFolder}}"
-        Write-Host "solutionName: ${{parameters.solutionName}}"
+        # Write-Host "solutionName: ${{parameters.solutionName}}"
         Write-Host "projectName: ${{parameters.projectName}}"
         Write-Host "runTests: ${{parameters.runTests}}"
-        Write-Host "testProjectName: ${{parameters.testProjectName}}"
+        # Write-Host "testProjectName: ${{parameters.testProjectName}}"
         Write-Host "versioningScheme: $(versioningScheme)"
 
   - task: NuGetToolInstaller@1
@@ -149,7 +149,8 @@ steps:
     displayName: "Build Test Project"
     inputs:
       command: 'build'
-      projects: '${{parameters.solutionFolder}}${{parameters.testProjectName}}/${{parameters.testProjectName}}.csproj'
+      # projects: '${{parameters.solutionFolder}}${{parameters.testProjectName}}/${{parameters.testProjectName}}.csproj'
+      projects: '${{parameters.solutionFolder}}.csproj'
       arguments: '--configuration $(configuration) /p:Version=$(Version)'
 
   - task: DotNetCoreCLI@2
@@ -157,7 +158,8 @@ steps:
     condition: eq(${{parameters.runTests}}, true)
     inputs:
       command: test
-      projects: '${{parameters.solutionFolder}}${{parameters.testProjectName}}/${{parameters.testProjectName}}.csproj'
+      # projects: '${{parameters.solutionFolder}}${{parameters.testProjectName}}/${{parameters.testProjectName}}.csproj'
+      projects: '${{parameters.solutionFolder}}.csproj'
       arguments: '--configuration $(configuration) --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=$(Build.SourcesDirectory)/coverage/ /p:MergeWith=$(Build.SourcesDirectory)/coverage/ --collect "Code coverage"'
 
   - task: DotNetCoreCLI@2
