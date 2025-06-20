@@ -32,4 +32,4 @@ steps:
       solutionFolder: src
       projectName: EPR.Calculator.API.Data
       runTests: true
-      versioningScheme: $(versioningScheme)
+      # versioningScheme: $(versioningScheme)
