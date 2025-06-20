@@ -30,8 +30,6 @@ steps:
     parameters:
       versionVariableGroupName: EPR.Common.Calculator.Data.API
       solutionFolder: src
-      # solutionName: src
       projectName: EPR.Calculator.API.Data
       runTests: true
-      # testProjectName: EPR.Common.Functions.Test
-      # versioningScheme: $(versioningScheme)
+      versioningScheme: $(versioningScheme)
