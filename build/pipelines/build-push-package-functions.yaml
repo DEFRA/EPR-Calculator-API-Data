@@ -13,8 +13,7 @@ parameters:
     values:
     - 'src'
 
-pool: 
-  vmImage: 'ubuntu-latest'
+pool: DEFRA-COMMON-ubuntu2004-SSV3
 
 variables:
   NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
