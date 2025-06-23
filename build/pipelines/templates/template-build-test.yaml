@@ -7,7 +7,7 @@ parameters:
   default: 'EPR.Calculator.API.Data'
 - name: runTests
   type: boolean
-  default: true
+  default: false
 - name: versionVariableGroupName
   type: string
 
