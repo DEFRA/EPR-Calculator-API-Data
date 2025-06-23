@@ -136,7 +136,7 @@ steps:
       feedsToUse: 'select'
 
   - task: DotNetCoreCLI@2
-    condition: eq(${{parameters.runTests}}, true)
+    condition: ${{ eq(parameters.runTests, true) }}
     displayName: "Build Test Project"
     inputs:
       command: 'build'
@@ -145,7 +145,7 @@ steps:
 
   - task: DotNetCoreCLI@2
     displayName: "Run Unit Tests"
-    condition: eq(${{parameters.runTests}}, true)
+    condition: ${{ eq(parameters.runTests, true) }}
     inputs:
       command: test
       projects: '${{parameters.solutionFolder}}.csproj'
