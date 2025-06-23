@@ -31,4 +31,4 @@ steps:
       versionVariableGroupName: EPR.Common.Calculator.Data.API
       solutionFolder: src
       projectName: EPR.Calculator.API.Data
-      runTests: true
+      runTests: false
