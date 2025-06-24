@@ -155,7 +155,7 @@ steps:
     displayName: 'Build Project'
     inputs:
       command: build
-      projects: '${{parameters.solutionFolder}}/${{parameters.projectName}}.csproj'
+      projects: '${{parameters.solutionFolder}}/${{parameters.projectName}}/${{parameters.projectName}}.csproj'
       arguments: '--configuration $(configuration)'
 
   - task: NuGetCommand@2
@@ -163,7 +163,7 @@ steps:
     inputs:
       command: 'pack'
       arguments: '--configuration $(configuration) --no-build'
-      packagesToPack: '${{parameters.solutionFolder}}/${{parameters.projectName}}.csproj'
+      packagesToPack: '${{parameters.solutionFolder}}/${{parameters.projectName}}/${{parameters.projectName}}.csproj'
       versioningScheme: $(versioningScheme)
       versionEnvVar: Build.BuildNumber
 
