@@ -124,7 +124,7 @@ steps:
     inputs:
       command: custom
       custom: 'tool'
-      arguments: 'install --global dotnet-ef' 
+      arguments: 'update --global dotnet-ef' 
 
   - task: NuGetToolInstaller@1
     displayName: 'Use NuGet Latest'
