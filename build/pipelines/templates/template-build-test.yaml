@@ -119,6 +119,13 @@ steps:
         Write-Host "runTests: ${{parameters.runTests}}"
         Write-Host "versioningScheme: $(versioningScheme)"
 
+  - task: DotNetCoreCLI@2
+    displayName: Install EF Tool
+    inputs:
+      command: custom
+      custom: 'tool'
+      arguments: 'install --global dotnet-ef' 
+
   - task: NuGetToolInstaller@1
     displayName: 'Use NuGet Latest'
 
