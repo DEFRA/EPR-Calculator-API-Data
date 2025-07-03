@@ -6,7 +6,7 @@ dotnet tool install -g dotnet-ef
 
 **** Command to Run the created the Migrations ****
 
-dotnet ef migrations add AddInitialMigration --startup-project EPR.Calculator.API --project EPR.Calculator.API.Data
+dotnet ef migrations add AddInitialMigration --project ./src/EPR.Calculator.API.Data
 
 **** Command to add a migration *****
 
@@ -14,7 +14,7 @@ dotnet ef migrations add AddBlogCreatedTimestamp
 
 **** Command to remove latest Migration *****
 
-dotnet ef migrations remove --verbose --project "EPR.Calculator.API.Data" --startup-project "EPR.Calculator.API" 
+dotnet ef migrations remove --verbose --project "./src/EPR.Calculator.API.Data" 
 
 **** Listing Migrations *****
 
@@ -25,10 +25,9 @@ dotnet ef migrations list
 dotnet ef migrations has-pending-model-changes
 
 **** Creating Migrations for Sql ******
-Should be run in the Data project
 
-dotnet ef migrations script -o  ./Scripts/migrations.sql -i
+dotnet ef migrations script -o  ./EPR.Calculator.API.Data/Scripts/migrations.sql -i --project "./src/EPR.Calculator.API.Data" 
 
 ***** Command to Update the migrations on the database *****
 
-dotnet ef database update --verbose --project "EPR.Calculator.API.Data" --startup-project "EPR.Calculator.API"
+dotnet ef database update --verbose --project "./src/EPR.Calculator.API.Data"

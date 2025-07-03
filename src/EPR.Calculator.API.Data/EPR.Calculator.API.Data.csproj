@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Version>1.0.10</Version>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
 	<Target Name="GenerateSqlScript" AfterTargets="AfterBuild" Condition="$(AzureBuild) != true">
@@ -24,6 +26,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.6" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="10.3.0.106239">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -32,15 +35,18 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
 	  <SonarQubeSetting Include="sonar.coverage.exclusions">
-		  <value>Scripts/*.*,Migrations/*.*,DataSeeder/*.*,DataModels/*.*</value>
+		  <value>Scripts/*.*,Migrations/*.*,DataSeeder/*.*,DataModels/*.*,TypeConfigurations/*.*</value>
 	  </SonarQubeSetting>
   </ItemGroup>
   <ItemGroup>
 	  <SonarQubeSetting Include="sonar.cpd.exclusions">
-		  <Value>Scripts/*.*,Migrations/*.*,DataSeeder/*.*,DataModels/*.*</Value>
+		  <Value>Scripts/*.*,Migrations/*.*,DataSeeder/*.*,DataModels/*.*,TypeConfigurations/*.*</Value>
 	  </SonarQubeSetting>
   </ItemGroup>
 	<ItemGroup>
@@ -50,5 +56,10 @@
 		<None Update="Scripts\**\*">
 			<SonarQubeExclude>true</SonarQubeExclude>
 		</None>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 </Project>
