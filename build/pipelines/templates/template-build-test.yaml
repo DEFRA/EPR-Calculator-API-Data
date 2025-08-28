@@ -156,7 +156,7 @@ steps:
     displayName: "Package Restore"
     inputs:
       command: 'restore'
-      restoreSolution: '${{parameters.solutionFolder}}/*.sln'
+      restoreSolution: '${{ parameters.solutionFolder }}/*.sln'
       feedsToUse: 'select'
 
   - task: DotNetCoreCLI@2
@@ -164,7 +164,7 @@ steps:
     displayName: "Build Test Project"
     inputs:
       command: 'build'
-      projects: '${{parameters.solutionFolder}}.csproj'
+      projects: '${{ parameters.solutionFolder }}.csproj'
       arguments: '--configuration $(configuration) /p:Version=$(Version)'
 
   - task: DotNetCoreCLI@2
