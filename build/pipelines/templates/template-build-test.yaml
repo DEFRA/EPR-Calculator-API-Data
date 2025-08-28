@@ -156,7 +156,7 @@ steps:
     displayName: "Package Restore"
     inputs:
       command: 'restore'
-      restoreSolution: '${{ parameters.solutionFolder }}/${{ parameters.solutionName}}.sln'
+      restoreSolution: '${{ parameters.solutionName}}.sln'
       feedsToUse: 'select'
 
   - task: DotNetCoreCLI@2
