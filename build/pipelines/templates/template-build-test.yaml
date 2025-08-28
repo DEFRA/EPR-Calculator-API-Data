@@ -1,15 +1,27 @@
 parameters:
 - name: solutionFolder
   type: string
-  default: 'src'
+  default: ''
+- name: solutionName
+  type: string
+  default: ''
 - name: projectName
   type: string
-  default: 'EPR.Calculator.API.Data'
+  default: ''
 - name: runTests
   type: boolean
   default: false
 - name: versionVariableGroupName
   type: string
+- name: dotnetVersion
+  type: string
+  default: ''
+- name: runNugetTasks
+  type: boolean
+  default: false
+- name: projectFolder
+  type: string
+  default: ''
 
 steps:
   - pwsh: | 
