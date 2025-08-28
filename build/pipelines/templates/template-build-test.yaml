@@ -156,7 +156,7 @@ steps:
     displayName: "Package Restore"
     inputs:
       command: 'restore'
-      restoreSolution: '${{ parameters.solutionName}}.sln'
+      restoreSolution: 'src/EPR.Calculator.API.Data.sln'
       feedsToUse: 'select'
 
   - task: DotNetCoreCLI@2
@@ -179,7 +179,7 @@ steps:
     displayName: 'Build Project'
     inputs:
       command: build
-      projects: '${{parameters.solutionFolder}}/${{parameters.projectName}}/${{parameters.projectName}}.csproj'
+      projects: 'src/EPR.Calculator.API.Data/EPR.Calculator.API.Data.csproj'
       arguments: '--configuration $(configuration)'
 
   - task: NuGetCommand@2
