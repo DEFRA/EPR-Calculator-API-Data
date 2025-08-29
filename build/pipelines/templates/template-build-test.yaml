@@ -179,7 +179,7 @@ steps:
     displayName: 'Build Project'
     inputs:
       command: build
-      projects: 'src/${{ parameters.projectFolder }}/${{ parameters.projectName }}.csproj'
+      projects: '${{ parameters.projectFolder }}/${{ parameters.projectName }}.csproj'
       arguments: '--configuration $(configuration)'
 
   - task: NuGetCommand@2
