@@ -154,12 +154,29 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20240731130652_202407311405_UpdateTemplateMaster'
 )
 BEGIN
-    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'parameter_unique_ref', N'parameter_type', N'parameter_category', N'valid_Range_from', N'valid_Range_to') AND [object_id] = OBJECT_ID(N'[default_parameter_template_master]'))
-        SET IDENTITY_INSERT [default_parameter_template_master] ON;
-    EXEC(N'INSERT INTO [default_parameter_template_master] ([parameter_unique_ref], [parameter_type], [parameter_category], [valid_Range_from], [valid_Range_to])
-    VALUES (N''TONT-AD'', N''Amount Decrease'', N''Tonnage change threshold'', 0.0, 999999999.99)');
-    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'parameter_unique_ref', N'parameter_type', N'parameter_category', N'valid_Range_from', N'valid_Range_to') AND [object_id] = OBJECT_ID(N'[default_parameter_template_master]'))
-        SET IDENTITY_INSERT [default_parameter_template_master] OFF;
+
+                    IF NOT EXISTS (
+                        SELECT 1 FROM [default_parameter_template_master]
+                        WHERE [parameter_unique_ref] = 'TONT-AD'
+                    )
+                    BEGIN
+                        IF EXISTS (
+                            SELECT * FROM [sys].[identity_columns]
+                            WHERE [object_id] = OBJECT_ID('default_parameter_template_master')
+                        )
+                            SET IDENTITY_INSERT [default_parameter_template_master] ON;
+
+                        INSERT INTO [default_parameter_template_master]
+                        ([parameter_unique_ref], [parameter_type], [parameter_category], [valid_Range_from], [valid_Range_to])
+                        VALUES ('TONT-AD', 'Amount Decrease', 'Tonnage change threshold', 0.00, 999999999.99);
+
+                        IF EXISTS (
+                            SELECT * FROM [sys].[identity_columns]
+                            WHERE [object_id] = OBJECT_ID('default_parameter_template_master')
+                        )
+                            SET IDENTITY_INSERT [default_parameter_template_master] OFF;
+                    END
+                
 END;
 GO
 
@@ -168,9 +185,11 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20240731130652_202407311405_UpdateTemplateMaster'
 )
 BEGIN
-    EXEC(N'UPDATE [default_parameter_setting_detail] SET [parameter_unique_ref] = N''TONT-AD''
-    WHERE [parameter_unique_ref] = N''TONT-DI'';
-    SELECT @@ROWCOUNT');
+
+                    UPDATE [default_parameter_setting_detail]
+                    SET [parameter_unique_ref] = 'TONT-AD'
+                    WHERE [parameter_unique_ref] = 'TONT-DI';
+                
 END;
 GO
 
@@ -179,9 +198,10 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20240731130652_202407311405_UpdateTemplateMaster'
 )
 BEGIN
-    EXEC(N'DELETE FROM [default_parameter_template_master]
-    WHERE [parameter_unique_ref] = N''TONT-DI'';
-    SELECT @@ROWCOUNT');
+
+                    DELETE FROM [default_parameter_template_master]
+                    WHERE [parameter_unique_ref] = 'TONT-DI';
+                
 END;
 GO
 
@@ -3632,6 +3652,1318 @@ IF NOT EXISTS (
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
     VALUES (N'20250319095159_AddFinancialYearForeignKeys', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250424155648_AddingHasBillingFileGeneratedColumn'
+)
+BEGIN
+    ALTER TABLE [calculator_run] ADD [HasBillingFileGenerated] bit NOT NULL DEFAULT CAST(0 AS bit);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250424155648_AddingHasBillingFileGeneratedColumn'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250424155648_AddingHasBillingFileGeneratedColumn', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250427142501_AddNewRunClassification'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'status', N'created_by') AND [object_id] = OBJECT_ID(N'[calculator_run_classification]'))
+        SET IDENTITY_INSERT [calculator_run_classification] ON;
+    EXEC(N'INSERT INTO [calculator_run_classification] ([status], [created_by])
+    VALUES (N''INITIAL RUN COMPLETED'', N''System User'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'status', N'created_by') AND [object_id] = OBJECT_ID(N'[calculator_run_classification]'))
+        SET IDENTITY_INSERT [calculator_run_classification] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250427142501_AddNewRunClassification'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250427142501_AddNewRunClassification', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250428101935_AddNewRunClassifications'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'status', N'created_by') AND [object_id] = OBJECT_ID(N'[calculator_run_classification]'))
+        SET IDENTITY_INSERT [calculator_run_classification] ON;
+    EXEC(N'INSERT INTO [calculator_run_classification] ([status], [created_by])
+    VALUES (N''INITIAL RUN'', N''Test user''),
+    (N''INTERIM RE-CALCULATION RUN'', N''Test user''),
+    (N''FINAL RUN'', N''Test user''),
+    (N''FINAL RE-CALCULATION RUN'', N''Test user'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'status', N'created_by') AND [object_id] = OBJECT_ID(N'[calculator_run_classification]'))
+        SET IDENTITY_INSERT [calculator_run_classification] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250428101935_AddNewRunClassifications'
+)
+BEGIN
+    EXEC(N'UPDATE [calculator_run_classification] SET [status] = N''TEST RUN''
+    WHERE [id] = 4;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250428101935_AddNewRunClassifications'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250428101935_AddNewRunClassifications', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250507155935_AddCalculatorRunBillingFileMetadataTable'
+)
+BEGIN
+    CREATE TABLE [calculator_run_billing_file_metadata] (
+        [id] int NOT NULL IDENTITY,
+        [billing_csv_filename] nvarchar(400) NULL,
+        [billing_json_filename] nvarchar(400) NULL,
+        [billing_file_created_date] datetime2 NOT NULL,
+        [billing_file_created_by] nvarchar(400) NOT NULL,
+        [billing_file_authorised_date] datetime2 NULL,
+        [billing_file_authorised_by] nvarchar(400) NULL,
+        [calculator_run_id] int NOT NULL,
+        CONSTRAINT [PK_calculator_run_billing_file_metadata] PRIMARY KEY ([id]),
+        CONSTRAINT [FK_calculator_run_billing_file_metadata_calculator_run_calculator_run_id] FOREIGN KEY ([calculator_run_id]) REFERENCES [calculator_run] ([id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250507155935_AddCalculatorRunBillingFileMetadataTable'
+)
+BEGIN
+    CREATE INDEX [IX_calculator_run_billing_file_metadata_calculator_run_id] ON [calculator_run_billing_file_metadata] ([calculator_run_id]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250507155935_AddCalculatorRunBillingFileMetadataTable'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250507155935_AddCalculatorRunBillingFileMetadataTable', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250509113737_AddTradingName'
+)
+BEGIN
+    ALTER TABLE [organisation_data] ADD [trading_name] nvarchar(400) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250509113737_AddTradingName'
+)
+BEGIN
+    ALTER TABLE [calculator_run_organization_data_detail] ADD [trading_name] nvarchar(400) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250509113737_AddTradingName'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250509113737_AddTradingName', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250516101138_AddTradingNameToProducerDetail'
+)
+BEGIN
+    ALTER TABLE [producer_detail] ADD [trading_name] nvarchar(4000) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250516101138_AddTradingNameToProducerDetail'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250516101138_AddTradingNameToProducerDetail', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250516101257_UpdateOrganisationSproc'
+)
+BEGIN
+
+                    IF OBJECT_ID(N'[dbo].[CreateRunOrganization]', N'P') IS NOT NULL
+                        DROP PROCEDURE [dbo].[CreateRunOrganization]
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250516101257_UpdateOrganisationSproc'
+)
+BEGIN
+
+                    DECLARE @Sql NVARCHAR(MAX)
+                    SET @Sql = N'
+                    CREATE PROCEDURE [dbo].[CreateRunOrganization]
+                    (
+                        @RunId int,
+                        @calendarYear varchar(400),
+                        @createdBy varchar(400)
+                    )
+                    AS
+                    BEGIN
+                        SET NOCOUNT ON
+
+                        declare @DateNow datetime, @orgDataMasterid int
+                        SET @DateNow = GETDATE()
+
+                        declare @oldCalcRunOrgMasterId int
+                        SET @oldCalcRunOrgMasterId = (select top 1 id from dbo.calculator_run_organization_data_master order by id desc)
+
+                        Update calculator_run_organization_data_master SET effective_to = @DateNow WHERE id = @oldCalcRunOrgMasterId
+
+                        INSERT into dbo.calculator_run_organization_data_master
+                        (calendar_year, created_at, created_by, effective_from, effective_to)
+                        values
+                        (@calendarYear, @DateNow, @createdBy, @DateNow, NULL)
+
+                        SET @orgDataMasterid  = CAST(scope_identity() AS int);
+
+                        INSERT 
+                        into 
+                            dbo.calculator_run_organization_data_detail
+                            (calculator_run_organization_data_master_id, 
+                                load_ts,
+                                organisation_id,
+                                organisation_name,
+                                trading_name,
+                                submission_period_desc,
+                                subsidiary_id)
+                        SELECT  @orgDataMasterid, 
+                                load_ts,
+                                organisation_id,
+                                organisation_name,
+                                trading_name,
+                                submission_period_desc,
+                                subsidiary_id  
+                                from 
+                                dbo.organisation_data
+
+                        Update dbo.calculator_run Set calculator_run_organization_data_master_id = @orgDataMasterid where id = @RunId
+
+                    END'
+                    EXEC(@Sql)
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250516101257_UpdateOrganisationSproc'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250516101257_UpdateOrganisationSproc', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250521145003_AddProducerInvoicedMaterialNetTonnage'
+)
+BEGIN
+    CREATE TABLE [producer_invoiced_material_net_tonnage] (
+        [id] int NOT NULL IDENTITY,
+        [calculator_run_id] int NOT NULL,
+        [material_id] int NOT NULL,
+        [producer_id] int NOT NULL,
+        [invoiced_net_tonnage] decimal(18,2) NULL,
+        CONSTRAINT [PK_producer_invoiced_material_net_tonnage] PRIMARY KEY ([id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250521145003_AddProducerInvoicedMaterialNetTonnage'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250521145003_AddProducerInvoicedMaterialNetTonnage', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250521145147_AddProducerDesignatedRunInvoiceInstruction'
+)
+BEGIN
+    CREATE TABLE [producer_designated_run_invoice_instruction] (
+        [id] int NOT NULL IDENTITY,
+        [producer_id] int NOT NULL,
+        [calculator_run_id] int NOT NULL,
+        [current_year_invoiced_total_after_this_run] decimal(18,2) NULL,
+        [invoice_amount] decimal(18,2) NULL,
+        [outstanding_balance] decimal(18,2) NULL,
+        [billing_instruction_id] nvarchar(4000) NULL,
+        [instruction_confirmed_date] datetime2 NULL,
+        [instruction_confirmed_by] nvarchar(4000) NULL,
+        CONSTRAINT [PK_producer_designated_run_invoice_instruction] PRIMARY KEY ([id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250521145147_AddProducerDesignatedRunInvoiceInstruction'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250521145147_AddProducerDesignatedRunInvoiceInstruction', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250521145341_AddProducerResultFileSuggestedBillingInstruction'
+)
+BEGIN
+    CREATE TABLE [producer_resultfile_suggested_billing_instruction] (
+        [id] int NOT NULL IDENTITY,
+        [calculator_run_id] int NOT NULL,
+        [producer_id] int NOT NULL,
+        [total_producer_bill_with_bad_debt] decimal(18,2) NOT NULL,
+        [current_year_invoice_total_to_date] decimal(18,2) NULL,
+        [tonnage_change_since_last_invoice] nvarchar(4000) NULL,
+        [amount_liability_difference_calc_vs_prev] decimal(18,2) NULL,
+        [material_pound_threshold_breached] nvarchar(4000) NULL,
+        [tonnage_pound_threshold_breached] nvarchar(4000) NULL,
+        [percentage_liability_difference_calc_vs_prev] decimal(18,2) NULL,
+        [material_percentage_threshold_breached] nvarchar(4000) NULL,
+        [tonnage_percentage_threshold_breached] nvarchar(4000) NULL,
+        [suggested_billing_instruction] nvarchar(4000) NOT NULL,
+        [suggested_invoice_amount] decimal(18,2) NOT NULL,
+        [billing_instruction_accept_reject] nvarchar(4000) NULL,
+        [reason_for_rejection] nvarchar(4000) NULL,
+        [last_modified_accept_reject_by] nvarchar(4000) NULL,
+        [last_modified_accept_reject] datetime2 NULL,
+        CONSTRAINT [PK_producer_resultfile_suggested_billing_instruction] PRIMARY KEY ([id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250521145341_AddProducerResultFileSuggestedBillingInstruction'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250521145341_AddProducerResultFileSuggestedBillingInstruction', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522093001_AddProducerDesignatedRunHistoryRelationships'
+)
+BEGIN
+    CREATE INDEX [IX_producer_resultfile_suggested_billing_instruction_calculator_run_id] ON [producer_resultfile_suggested_billing_instruction] ([calculator_run_id]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522093001_AddProducerDesignatedRunHistoryRelationships'
+)
+BEGIN
+    CREATE INDEX [IX_producer_invoiced_material_net_tonnage_calculator_run_id] ON [producer_invoiced_material_net_tonnage] ([calculator_run_id]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522093001_AddProducerDesignatedRunHistoryRelationships'
+)
+BEGIN
+    CREATE INDEX [IX_producer_invoiced_material_net_tonnage_material_id] ON [producer_invoiced_material_net_tonnage] ([material_id]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522093001_AddProducerDesignatedRunHistoryRelationships'
+)
+BEGIN
+    CREATE INDEX [IX_producer_designated_run_invoice_instruction_calculator_run_id] ON [producer_designated_run_invoice_instruction] ([calculator_run_id]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522093001_AddProducerDesignatedRunHistoryRelationships'
+)
+BEGIN
+    ALTER TABLE [producer_designated_run_invoice_instruction] ADD CONSTRAINT [FK_producer_designated_run_invoice_instruction_calculator_run_calculator_run_id] FOREIGN KEY ([calculator_run_id]) REFERENCES [calculator_run] ([id]) ON DELETE CASCADE;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522093001_AddProducerDesignatedRunHistoryRelationships'
+)
+BEGIN
+    ALTER TABLE [producer_invoiced_material_net_tonnage] ADD CONSTRAINT [FK_producer_invoiced_material_net_tonnage_calculator_run_calculator_run_id] FOREIGN KEY ([calculator_run_id]) REFERENCES [calculator_run] ([id]) ON DELETE CASCADE;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522093001_AddProducerDesignatedRunHistoryRelationships'
+)
+BEGIN
+    ALTER TABLE [producer_invoiced_material_net_tonnage] ADD CONSTRAINT [FK_producer_invoiced_material_net_tonnage_material_material_id] FOREIGN KEY ([material_id]) REFERENCES [material] ([id]) ON DELETE CASCADE;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522093001_AddProducerDesignatedRunHistoryRelationships'
+)
+BEGIN
+    ALTER TABLE [producer_resultfile_suggested_billing_instruction] ADD CONSTRAINT [FK_producer_resultfile_suggested_billing_instruction_calculator_run_calculator_run_id] FOREIGN KEY ([calculator_run_id]) REFERENCES [calculator_run] ([id]) ON DELETE CASCADE;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250522093001_AddProducerDesignatedRunHistoryRelationships'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250522093001_AddProducerDesignatedRunHistoryRelationships', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250620144219_AddNewColumnIsBillingFileGenerating'
+)
+BEGIN
+    ALTER TABLE [calculator_run] ADD [is_billing_file_generating] bit NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250620144219_AddNewColumnIsBillingFileGenerating'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250620144219_AddNewColumnIsBillingFileGenerating', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250709123908_RemoveColumnHasBillingFileGenerated'
+)
+BEGIN
+    DECLARE @var28 sysname;
+    SELECT @var28 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[calculator_run]') AND [c].[name] = N'HasBillingFileGenerated');
+    IF @var28 IS NOT NULL EXEC(N'ALTER TABLE [calculator_run] DROP CONSTRAINT [' + @var28 + '];');
+    ALTER TABLE [calculator_run] DROP COLUMN [HasBillingFileGenerated];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250709123908_RemoveColumnHasBillingFileGenerated'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250709123908_RemoveColumnHasBillingFileGenerated', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250717154431_DeleteFinancialYearsData'
+)
+BEGIN
+    EXEC(N'DELETE FROM [calculator_run_financial_years]
+    WHERE [financial_Year] = N''2026-27'';
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250717154431_DeleteFinancialYearsData'
+)
+BEGIN
+    EXEC(N'DELETE FROM [calculator_run_financial_years]
+    WHERE [financial_Year] = N''2027-28'';
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250717154431_DeleteFinancialYearsData'
+)
+BEGIN
+    EXEC(N'DELETE FROM [calculator_run_financial_years]
+    WHERE [financial_Year] = N''2028-29'';
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250717154431_DeleteFinancialYearsData'
+)
+BEGIN
+    EXEC(N'DELETE FROM [calculator_run_financial_years]
+    WHERE [financial_Year] = N''2029-30'';
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250717154431_DeleteFinancialYearsData'
+)
+BEGIN
+    EXEC(N'DELETE FROM [calculator_run_financial_years]
+    WHERE [financial_Year] = N''2030-31'';
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250717154431_DeleteFinancialYearsData'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250717154431_DeleteFinancialYearsData', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721154526_AddFunctionGetInvoiceAmount'
+)
+BEGIN
+    IF OBJECT_ID(N'[dbo].[GetInvoiceAmount]', 'FN') IS NOT NULL
+        DROP FUNCTION [dbo].[GetInvoiceAmount]
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721154526_AddFunctionGetInvoiceAmount'
+)
+BEGIN
+    declare @sql nvarchar(max)
+    SET @sql = N'
+    CREATE FUNCTION [dbo].[GetInvoiceAmount] ( 
+        @billingInstructionAcceptReject VARCHAR(250),
+        @suggestedBillingInstruction    VARCHAR(250),
+        @totalProducerBillWithBadDebtProvision DECIMAL(18,2),
+        @LiabilityDifference           DECIMAL(18,2)
+    )
+    RETURNS DECIMAL(18,2)
+    AS
+    BEGIN
+        IF @billingInstructionAcceptReject <> ''Accepted''
+            RETURN NULL;
+
+        RETURN 
+            CASE 
+                WHEN @suggestedBillingInstruction IN (''INITIAL'', ''REBILL'') THEN @totalProducerBillWithBadDebtProvision
+                WHEN @suggestedBillingInstruction = ''DELTA'' THEN @LiabilityDifference
+                ELSE NULL
+            END;
+    END'
+
+    EXEC(@sql)
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721154526_AddFunctionGetInvoiceAmount'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250721154526_AddFunctionGetInvoiceAmount', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721161113_GetCurrentYearInvoicedTotalAfterThisRun'
+)
+BEGIN
+    IF OBJECT_ID(N'[dbo].[GetCurrentYearInvoicedTotalAfterThisRun]', 'FN') IS NOT NULL  
+    DROP FUNCTION [dbo].GetCurrentYearInvoicedTotalAfterThisRun
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721161113_GetCurrentYearInvoicedTotalAfterThisRun'
+)
+BEGIN
+    DECLARE @sql NVARCHAR(MAX) 
+    SET @sql = N'CREATE FUNCTION [dbo].[GetCurrentYearInvoicedTotalAfterThisRun] ( 
+        @billingInstructionAcceptReject      VARCHAR(250),
+        @suggestedBillingInstruction         VARCHAR(250),
+        @currentYearInvoicedTotalToDate      DECIMAL(18,2),
+        @invoiceAmount                       DECIMAL(18,2)
+    )
+    RETURNS DECIMAL(18,2)
+    AS
+    BEGIN
+        -- Rule 1: Cancelled instruction always returns NULL
+        IF @suggestedBillingInstruction = ''CANCEL''
+            RETURN NULL;
+
+        -- Rule 2: Rejected INITIAL returns NULL
+        IF @billingInstructionAcceptReject = ''Rejected'' AND @suggestedBillingInstruction = ''INITIAL''
+            RETURN NULL;
+
+        -- Rule 3: Rejected (but not INITIAL) returns current total as-is
+        IF @billingInstructionAcceptReject = ''Rejected''
+            RETURN ISNULL(@currentYearInvoicedTotalToDate, 0);
+
+        -- Rule 4: Accepted or any other case adds invoice amount
+        RETURN ISNULL(@currentYearInvoicedTotalToDate, 0) + ISNULL(@invoiceAmount, 0);
+    END'
+    EXEC(@sql)
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721161113_GetCurrentYearInvoicedTotalAfterThisRun'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250721161113_GetCurrentYearInvoicedTotalAfterThisRun', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721161345_GetOutstandingBalance'
+)
+BEGIN
+    IF OBJECT_ID(N'[dbo].[GetOutstandingBalance]', 'FN') IS NOT NULL  
+    DROP FUNCTION [dbo].GetOutstandingBalance
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721161345_GetOutstandingBalance'
+)
+BEGIN
+    DECLARE @sql NVARCHAR(MAX) 
+    SET @sql = N'CREATE FUNCTION [dbo].[GetOutstandingBalance] (
+        @billingInstructionAcceptReject        VARCHAR(250),
+        @suggestedBillingInstruction           VARCHAR(250),
+        @totalProducerBillWithBadDebtProvision DECIMAL(18,2),
+        @LiabilityDifference                   DECIMAL(18,2)
+    )
+    RETURNS DECIMAL(18,2)
+    AS
+    BEGIN
+        RETURN 
+            CASE 
+                WHEN @billingInstructionAcceptReject <> ''Accepted'' AND @suggestedBillingInstruction = ''INITIAL''
+                    THEN @totalProducerBillWithBadDebtProvision
+
+                WHEN @billingInstructionAcceptReject <> ''Accepted''
+                    THEN @LiabilityDifference
+
+                ELSE NULL
+            END;
+    END'
+    EXEC(@sql)
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721161345_GetOutstandingBalance'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250721161345_GetOutstandingBalance', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721161415_GetInvoiceDetailsAtProducerLevel'
+)
+BEGIN
+    IF OBJECT_ID(N'[dbo].[InsertInvoiceDetailsAtProducerLevel]', 'P') IS NOT NULL  
+    DROP PROCEDURE [dbo].[InsertInvoiceDetailsAtProducerLevel];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721161415_GetInvoiceDetailsAtProducerLevel'
+)
+BEGIN
+    DECLARE @sql NVARCHAR(MAX) 
+    SET @sql = N'CREATE PROCEDURE [dbo].[InsertInvoiceDetailsAtProducerLevel]
+    (
+        @instructionConfirmedBy NVARCHAR(4000),
+        @instructionConfirmedDate DATETIME2(7),
+        @calculatorRunID INT
+    )
+    AS
+    BEGIN
+        SET NOCOUNT OFF
+        -- Temp table to hold calculated values
+        CREATE TABLE #CalculatedValues (
+            calculator_run_id INT,
+            producer_id INT,
+            total_producer_bill_with_bad_debt DECIMAL(18,2),
+            current_year_invoice_total_to_date DECIMAL(18,2),
+            amount_liability_difference_calc_vs_prev DECIMAL(18,2),
+            suggested_billing_instruction NVARCHAR(4000),
+            billing_instruction_accept_reject NVARCHAR(4000),
+            invoice_amount DECIMAL(18,2),
+            instruction_confirmed_by NVARCHAR(4000),
+            instruction_confirmed_date DATETIME2(7),
+            billing_instruction_id NVARCHAR(4000)
+        );
+
+        -- Insert into temp table
+        INSERT INTO #CalculatedValues
+        SELECT 
+            prsbi.calculator_run_id,
+            prsbi.producer_id,
+            prsbi.total_producer_bill_with_bad_debt, 
+            prsbi.current_year_invoice_total_to_date,
+            prsbi.amount_liability_difference_calc_vs_prev,
+            prsbi.suggested_billing_instruction,
+            prsbi.billing_instruction_accept_reject,
+            dbo.GetInvoiceAmount(
+                prsbi.billing_instruction_accept_reject,
+                prsbi.suggested_billing_instruction,
+                prsbi.total_producer_bill_with_bad_debt,
+                prsbi.amount_liability_difference_calc_vs_prev
+            ) AS invoice_amount,
+            @instructionConfirmedBy AS instruction_confirmed_by,
+            @instructionConfirmedDate AS instruction_confirmed_date,
+            CONCAT(prsbi.calculator_run_id, ''-'', prsbi.producer_id) AS billing_instruction_id
+        FROM dbo.producer_resultfile_suggested_billing_instruction AS prsbi
+        WHERE prsbi.calculator_run_id = @calculatorRunID AND LOWER(prsbi.billing_instruction_accept_reject) = ''accepted'';
+
+        -- First SELECT using the temp table
+    	INSERT INTO [dbo].[producer_designated_run_invoice_instruction] (
+    		producer_id,
+    		calculator_run_id,
+    		current_year_invoiced_total_after_this_run,
+    		invoice_amount,
+    		outstanding_balance,
+    		billing_instruction_id,
+    		instruction_confirmed_date,
+    		instruction_confirmed_by
+    		)
+    			SELECT 
+    				cv.producer_id,
+    				cv.calculator_run_id,
+    				dbo.GetCurrentYearInvoicedTotalAfterThisRun(
+    					cv.billing_instruction_accept_reject,
+    					cv.suggested_billing_instruction,
+    					cv.current_year_invoice_total_to_date,
+    					cv.invoice_amount
+    				) AS current_year_invoiced_total_after_this_run,
+    				cv.invoice_amount,
+    				dbo.GetOutstandingBalance(
+    					cv.billing_instruction_accept_reject,
+    					cv.suggested_billing_instruction,
+    					cv.total_producer_bill_with_bad_debt,
+    					cv.amount_liability_difference_calc_vs_prev
+    				) AS outstanding_balance,
+    				cv.billing_instruction_id,
+    				cv.instruction_confirmed_date,
+    				cv.instruction_confirmed_by			
+    			FROM #CalculatedValues AS cv;
+
+        DROP TABLE #CalculatedValues;
+    END'
+    EXEC(@sql)
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250721161415_GetInvoiceDetailsAtProducerLevel'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250721161415_GetInvoiceDetailsAtProducerLevel', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250723131102_MarkInitialRunsAsDeleted'
+)
+BEGIN
+    update dbo.calculator_run SET calculator_run_classification_id  = 6 where calculator_run_classification_id in (7,8)
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250723131102_MarkInitialRunsAsDeleted'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250723131102_MarkInitialRunsAsDeleted', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250723132540_UpdateInvoiceNetTonnageColumnPrecision'
+)
+BEGIN
+    DECLARE @var29 sysname;
+    SELECT @var29 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[producer_invoiced_material_net_tonnage]') AND [c].[name] = N'invoiced_net_tonnage');
+    IF @var29 IS NOT NULL EXEC(N'ALTER TABLE [producer_invoiced_material_net_tonnage] DROP CONSTRAINT [' + @var29 + '];');
+    ALTER TABLE [producer_invoiced_material_net_tonnage] ALTER COLUMN [invoiced_net_tonnage] decimal(18,3) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250723132540_UpdateInvoiceNetTonnageColumnPrecision'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250723132540_UpdateInvoiceNetTonnageColumnPrecision', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250723143822_AddFinancialYears'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'financial_Year') AND [object_id] = OBJECT_ID(N'[calculator_run_financial_years]'))
+        SET IDENTITY_INSERT [calculator_run_financial_years] ON;
+    EXEC(N'INSERT INTO [calculator_run_financial_years] ([financial_Year])
+    VALUES (N''2026-27'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'financial_Year') AND [object_id] = OBJECT_ID(N'[calculator_run_financial_years]'))
+        SET IDENTITY_INSERT [calculator_run_financial_years] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250723143822_AddFinancialYears'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'financial_Year') AND [object_id] = OBJECT_ID(N'[calculator_run_financial_years]'))
+        SET IDENTITY_INSERT [calculator_run_financial_years] ON;
+    EXEC(N'INSERT INTO [calculator_run_financial_years] ([financial_Year])
+    VALUES (N''2027-28'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'financial_Year') AND [object_id] = OBJECT_ID(N'[calculator_run_financial_years]'))
+        SET IDENTITY_INSERT [calculator_run_financial_years] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250723143822_AddFinancialYears'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'financial_Year') AND [object_id] = OBJECT_ID(N'[calculator_run_financial_years]'))
+        SET IDENTITY_INSERT [calculator_run_financial_years] ON;
+    EXEC(N'INSERT INTO [calculator_run_financial_years] ([financial_Year])
+    VALUES (N''2028-29'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'financial_Year') AND [object_id] = OBJECT_ID(N'[calculator_run_financial_years]'))
+        SET IDENTITY_INSERT [calculator_run_financial_years] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250723143822_AddFinancialYears'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'financial_Year') AND [object_id] = OBJECT_ID(N'[calculator_run_financial_years]'))
+        SET IDENTITY_INSERT [calculator_run_financial_years] ON;
+    EXEC(N'INSERT INTO [calculator_run_financial_years] ([financial_Year])
+    VALUES (N''2029-30'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'financial_Year') AND [object_id] = OBJECT_ID(N'[calculator_run_financial_years]'))
+        SET IDENTITY_INSERT [calculator_run_financial_years] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250723143822_AddFinancialYears'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'financial_Year') AND [object_id] = OBJECT_ID(N'[calculator_run_financial_years]'))
+        SET IDENTITY_INSERT [calculator_run_financial_years] ON;
+    EXEC(N'INSERT INTO [calculator_run_financial_years] ([financial_Year])
+    VALUES (N''2030-31'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'financial_Year') AND [object_id] = OBJECT_ID(N'[calculator_run_financial_years]'))
+        SET IDENTITY_INSERT [calculator_run_financial_years] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250723143822_AddFinancialYears'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250723143822_AddFinancialYears', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250724153138_UpdateNetTonnagePrecision'
+)
+BEGIN
+    DECLARE @var30 sysname;
+    SELECT @var30 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[producer_invoiced_material_net_tonnage]') AND [c].[name] = N'invoiced_net_tonnage');
+    IF @var30 IS NOT NULL EXEC(N'ALTER TABLE [producer_invoiced_material_net_tonnage] DROP CONSTRAINT [' + @var30 + '];');
+    ALTER TABLE [producer_invoiced_material_net_tonnage] ALTER COLUMN [invoiced_net_tonnage] decimal(18,3) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250724153138_UpdateNetTonnagePrecision'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250724153138_UpdateNetTonnagePrecision', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250725133129_AlterInsertInvoiceDetails'
+)
+BEGIN
+    IF OBJECT_ID(N'[dbo].[InsertInvoiceDetailsAtProducerLevel]', 'P') IS NOT NULL  
+    DROP PROCEDURE [dbo].[InsertInvoiceDetailsAtProducerLevel];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250725133129_AlterInsertInvoiceDetails'
+)
+BEGIN
+    DECLARE @sql NVARCHAR(MAX) 
+    SET @sql = N'CREATE PROCEDURE [dbo].[InsertInvoiceDetailsAtProducerLevel]
+        (
+            @instructionConfirmedBy NVARCHAR(4000),
+            @instructionConfirmedDate DATETIME2(7),
+            @calculatorRunID INT
+        )
+        AS
+        BEGIN
+            SET NOCOUNT OFF
+            -- Temp table to hold calculated values
+            CREATE TABLE #CalculatedValues (
+                calculator_run_id INT,
+                producer_id INT,
+                total_producer_bill_with_bad_debt DECIMAL(18,2),
+                current_year_invoice_total_to_date DECIMAL(18,2),
+                amount_liability_difference_calc_vs_prev DECIMAL(18,2),
+                suggested_billing_instruction NVARCHAR(4000),
+                billing_instruction_accept_reject NVARCHAR(4000),
+                invoice_amount DECIMAL(18,2),
+                instruction_confirmed_by NVARCHAR(4000),
+                instruction_confirmed_date DATETIME2(7),
+                billing_instruction_id NVARCHAR(4000)
+            );
+
+            -- Insert into temp table
+            INSERT INTO #CalculatedValues
+            SELECT 
+                prsbi.calculator_run_id,
+                prsbi.producer_id,
+                prsbi.total_producer_bill_with_bad_debt, 
+                prsbi.current_year_invoice_total_to_date,
+                prsbi.amount_liability_difference_calc_vs_prev,
+                prsbi.suggested_billing_instruction,
+                prsbi.billing_instruction_accept_reject,
+                dbo.GetInvoiceAmount(
+                    prsbi.billing_instruction_accept_reject,
+                    prsbi.suggested_billing_instruction,
+                    prsbi.total_producer_bill_with_bad_debt,
+                    prsbi.amount_liability_difference_calc_vs_prev
+                ) AS invoice_amount,
+                @instructionConfirmedBy AS instruction_confirmed_by,
+                @instructionConfirmedDate AS instruction_confirmed_date,
+                CONCAT(prsbi.calculator_run_id, ''-'', prsbi.producer_id) AS billing_instruction_id
+            FROM dbo.producer_resultfile_suggested_billing_instruction AS prsbi
+            WHERE prsbi.calculator_run_id = @calculatorRunID
+
+            -- First SELECT using the temp table
+        	INSERT INTO [dbo].[producer_designated_run_invoice_instruction] (
+        		producer_id,
+        		calculator_run_id,
+        		current_year_invoiced_total_after_this_run,
+        		invoice_amount,
+        		outstanding_balance,
+        		billing_instruction_id,
+        		instruction_confirmed_date,
+        		instruction_confirmed_by
+        		)
+        			SELECT 
+        				cv.producer_id,
+        				cv.calculator_run_id,
+        				dbo.GetCurrentYearInvoicedTotalAfterThisRun(
+        					cv.billing_instruction_accept_reject,
+        					cv.suggested_billing_instruction,
+        					cv.current_year_invoice_total_to_date,
+        					cv.invoice_amount
+        				) AS current_year_invoiced_total_after_this_run,
+        				cv.invoice_amount,
+        				dbo.GetOutstandingBalance(
+        					cv.billing_instruction_accept_reject,
+        					cv.suggested_billing_instruction,
+        					cv.total_producer_bill_with_bad_debt,
+        					cv.amount_liability_difference_calc_vs_prev
+        				) AS outstanding_balance,
+        				cv.billing_instruction_id,
+        				cv.instruction_confirmed_date,
+        				cv.instruction_confirmed_by			
+        			FROM #CalculatedValues AS cv;
+
+            DROP TABLE #CalculatedValues;
+        END'
+    EXEC(@sql)
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250725133129_AlterInsertInvoiceDetails'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250725133129_AlterInsertInvoiceDetails', N'8.0.7');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250728083102_UpdateBillingInstructionId'
+)
+BEGIN
+    IF OBJECT_ID(N'[dbo].[InsertInvoiceDetailsAtProducerLevel]', 'P') IS NOT NULL  
+    DROP PROCEDURE [dbo].[InsertInvoiceDetailsAtProducerLevel];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250728083102_UpdateBillingInstructionId'
+)
+BEGIN
+    DECLARE @sql NVARCHAR(MAX) 
+    SET @sql = N'CREATE PROCEDURE [dbo].[InsertInvoiceDetailsAtProducerLevel]
+        (
+            @instructionConfirmedBy NVARCHAR(4000),
+            @instructionConfirmedDate DATETIME2(7),
+            @calculatorRunID INT
+        )
+        AS
+        BEGIN
+            SET NOCOUNT OFF
+            -- Temp table to hold calculated values
+            CREATE TABLE #CalculatedValues (
+                calculator_run_id INT,
+                producer_id INT,
+                total_producer_bill_with_bad_debt DECIMAL(18,2),
+                current_year_invoice_total_to_date DECIMAL(18,2),
+                amount_liability_difference_calc_vs_prev DECIMAL(18,2),
+                suggested_billing_instruction NVARCHAR(4000),
+                billing_instruction_accept_reject NVARCHAR(4000),
+                invoice_amount DECIMAL(18,2),
+                instruction_confirmed_by NVARCHAR(4000),
+                instruction_confirmed_date DATETIME2(7),
+                billing_instruction_id NVARCHAR(4000)
+            );
+
+            -- Insert into temp table
+            INSERT INTO #CalculatedValues
+            SELECT 
+                prsbi.calculator_run_id,
+                prsbi.producer_id,
+                prsbi.total_producer_bill_with_bad_debt, 
+                prsbi.current_year_invoice_total_to_date,
+                prsbi.amount_liability_difference_calc_vs_prev,
+                prsbi.suggested_billing_instruction,
+                prsbi.billing_instruction_accept_reject,
+                dbo.GetInvoiceAmount(
+                    prsbi.billing_instruction_accept_reject,
+                    prsbi.suggested_billing_instruction,
+                    prsbi.total_producer_bill_with_bad_debt,
+                    prsbi.amount_liability_difference_calc_vs_prev
+                ) AS invoice_amount,
+                @instructionConfirmedBy AS instruction_confirmed_by,
+                @instructionConfirmedDate AS instruction_confirmed_date,
+                CONCAT(prsbi.calculator_run_id, ''_'', prsbi.producer_id) AS billing_instruction_id
+            FROM dbo.producer_resultfile_suggested_billing_instruction AS prsbi
+            WHERE prsbi.calculator_run_id = @calculatorRunID
+
+            -- First SELECT using the temp table
+        	INSERT INTO [dbo].[producer_designated_run_invoice_instruction] (
+        		producer_id,
+        		calculator_run_id,
+        		current_year_invoiced_total_after_this_run,
+        		invoice_amount,
+        		outstanding_balance,
+        		billing_instruction_id,
+        		instruction_confirmed_date,
+        		instruction_confirmed_by
+        		)
+        			SELECT 
+        				cv.producer_id,
+        				cv.calculator_run_id,
+        				dbo.GetCurrentYearInvoicedTotalAfterThisRun(
+        					cv.billing_instruction_accept_reject,
+        					cv.suggested_billing_instruction,
+        					cv.current_year_invoice_total_to_date,
+        					cv.invoice_amount
+        				) AS current_year_invoiced_total_after_this_run,
+        				cv.invoice_amount,
+        				dbo.GetOutstandingBalance(
+        					cv.billing_instruction_accept_reject,
+        					cv.suggested_billing_instruction,
+        					cv.total_producer_bill_with_bad_debt,
+        					cv.amount_liability_difference_calc_vs_prev
+        				) AS outstanding_balance,
+        				cv.billing_instruction_id,
+        				cv.instruction_confirmed_date,
+        				cv.instruction_confirmed_by			
+        			FROM #CalculatedValues AS cv;
+
+            DROP TABLE #CalculatedValues;
+        END'
+    EXEC(@sql)
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250728083102_UpdateBillingInstructionId'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250728083102_UpdateBillingInstructionId', N'8.0.7');
 END;
 GO
 

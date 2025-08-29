@@ -62,6 +62,10 @@ namespace EPR.Calculator.API.Data.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("financial_year");
 
+                    b.Property<bool?>("IsBillingFileGenerating")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_billing_file_generating");
+
                     b.Property<int?>("LapcapDataMasterId")
                         .HasColumnType("int")
                         .HasColumnName("lapcap_data_master_id");
@@ -95,7 +99,56 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasIndex("LapcapDataMasterId");
 
-                    b.ToTable("calculator_run");
+                    b.ToTable("calculator_run", (string)null);
+                });
+
+            modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.CalculatorRunBillingFileMetadata", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BillingCsvFileName")
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)")
+                        .HasColumnName("billing_csv_filename");
+
+                    b.Property<string>("BillingFileAuthorisedBy")
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)")
+                        .HasColumnName("billing_file_authorised_by");
+
+                    b.Property<DateTime?>("BillingFileAuthorisedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("billing_file_authorised_date");
+
+                    b.Property<string>("BillingFileCreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)")
+                        .HasColumnName("billing_file_created_by");
+
+                    b.Property<DateTime>("BillingFileCreatedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("billing_file_created_date");
+
+                    b.Property<string>("BillingJsonFileName")
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)")
+                        .HasColumnName("billing_json_filename");
+
+                    b.Property<int>("CalculatorRunId")
+                        .HasColumnType("int")
+                        .HasColumnName("calculator_run_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CalculatorRunId");
+
+                    b.ToTable("calculator_run_billing_file_metadata", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.CalculatorRunClassification", b =>
@@ -121,7 +174,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("calculator_run_classification");
+                    b.ToTable("calculator_run_classification", (string)null);
 
                     b.HasData(
                         new
@@ -185,7 +238,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasIndex("CalculatorRunId");
 
-                    b.ToTable("calculator_run_csvfile_metadata");
+                    b.ToTable("calculator_run_csvfile_metadata", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.CalculatorRunFinancialYear", b =>
@@ -200,13 +253,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasKey("Name");
 
-                    b.ToTable("calculator_run_financial_years");
-
-                    b.HasData(
-                        new
-                        {
-                            Name = "2024-25"
-                        });
+                    b.ToTable("calculator_run_financial_years", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.CalculatorRunOrganisationDataDetail", b =>
@@ -244,11 +291,16 @@ namespace EPR.Calculator.API.Data.Migrations
                         .HasColumnType("nvarchar(400)")
                         .HasColumnName("subsidiary_id");
 
+                    b.Property<string>("TradingName")
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)")
+                        .HasColumnName("trading_name");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CalculatorRunOrganisationDataMasterId");
 
-                    b.ToTable("calculator_run_organization_data_detail");
+                    b.ToTable("calculator_run_organization_data_detail", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.CalculatorRunOrganisationDataMaster", b =>
@@ -284,7 +336,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("calculator_run_organization_data_master");
+                    b.ToTable("calculator_run_organization_data_master", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.CalculatorRunPomDataDetail", b =>
@@ -349,7 +401,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasIndex("CalculatorRunPomDataMasterId");
 
-                    b.ToTable("calculator_run_pom_data_detail");
+                    b.ToTable("calculator_run_pom_data_detail", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.CalculatorRunPomDataMaster", b =>
@@ -385,7 +437,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("calculator_run_pom_data_master");
+                    b.ToTable("calculator_run_pom_data_master", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.CostType", b =>
@@ -416,7 +468,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("cost_type");
+                    b.ToTable("cost_type", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.Country", b =>
@@ -447,7 +499,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("country");
+                    b.ToTable("country", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.CountryApportionment", b =>
@@ -484,7 +536,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("country_apportionment");
+                    b.ToTable("country_apportionment", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.DefaultParameterSettingDetail", b =>
@@ -516,7 +568,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasIndex("ParameterUniqueReferenceId");
 
-                    b.ToTable("default_parameter_setting_detail");
+                    b.ToTable("default_parameter_setting_detail", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.DefaultParameterSettingMaster", b =>
@@ -560,7 +612,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasIndex("ParameterYearId");
 
-                    b.ToTable("default_parameter_setting_master");
+                    b.ToTable("default_parameter_setting_master", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.DefaultParameterTemplateMaster", b =>
@@ -584,7 +636,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.Property<decimal>("ValidRangeFrom")
                         .HasPrecision(18, 3)
-                        .HasColumnType("decimal(18, 3)")
+                        .HasColumnType("decimal(18,3)")
                         .HasColumnName("valid_Range_from");
 
                     b.Property<decimal>("ValidRangeTo")
@@ -594,7 +646,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasKey("ParameterUniqueReferenceId");
 
-                    b.ToTable("default_parameter_template_master");
+                    b.ToTable("default_parameter_template_master", (string)null);
 
                     b.HasData(
                         new
@@ -956,7 +1008,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasIndex("UniqueReference");
 
-                    b.ToTable("lapcap_data_detail");
+                    b.ToTable("lapcap_data_detail", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.LapcapDataMaster", b =>
@@ -1001,7 +1053,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasIndex("ProjectionYearId");
 
-                    b.ToTable("lapcap_data_master");
+                    b.ToTable("lapcap_data_master", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.LapcapDataTemplateMaster", b =>
@@ -1035,7 +1087,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasKey("UniqueReference");
 
-                    b.ToTable("lapcap_data_template_master");
+                    b.ToTable("lapcap_data_template_master", (string)null);
 
                     b.HasData(
                         new
@@ -1324,7 +1376,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("material");
+                    b.ToTable("material", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.OrganisationData", b =>
@@ -1353,7 +1405,12 @@ namespace EPR.Calculator.API.Data.Migrations
                         .HasColumnType("nvarchar(400)")
                         .HasColumnName("subsidiary_id");
 
-                    b.ToTable("organisation_data");
+                    b.Property<string>("TradingName")
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)")
+                        .HasColumnName("trading_name");
+
+                    b.ToTable("organisation_data", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.PomData", b =>
@@ -1403,7 +1460,60 @@ namespace EPR.Calculator.API.Data.Migrations
                         .HasColumnType("nvarchar(400)")
                         .HasColumnName("subsidiary_id");
 
-                    b.ToTable("pom_data");
+                    b.ToTable("pom_data", (string)null);
+                });
+
+            modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.ProducerDesignatedRunInvoiceInstruction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BillingInstructionId")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnName("billing_instruction_id");
+
+                    b.Property<int>("CalculatorRunId")
+                        .HasColumnType("int")
+                        .HasColumnName("calculator_run_id");
+
+                    b.Property<decimal?>("CurrentYearInvoicedTotalAfterThisRun")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("current_year_invoiced_total_after_this_run");
+
+                    b.Property<string>("InstructionConfirmedBy")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnName("instruction_confirmed_by");
+
+                    b.Property<DateTime?>("InstructionConfirmedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("instruction_confirmed_date");
+
+                    b.Property<decimal?>("InvoiceAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("invoice_amount");
+
+                    b.Property<decimal?>("OutstandingBalance")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("outstanding_balance");
+
+                    b.Property<int>("ProducerId")
+                        .HasColumnType("int")
+                        .HasColumnName("producer_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CalculatorRunId");
+
+                    b.ToTable("producer_designated_run_invoice_instruction", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.ProducerDetail", b =>
@@ -1433,11 +1543,52 @@ namespace EPR.Calculator.API.Data.Migrations
                         .HasColumnType("nvarchar(400)")
                         .HasColumnName("subsidiary_id");
 
+                    b.Property<string>("TradingName")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnName("trading_name");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CalculatorRunId");
 
-                    b.ToTable("producer_detail");
+                    b.ToTable("producer_detail", (string)null);
+                });
+
+            modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.ProducerInvoicedMaterialNetTonnage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CalculatorRunId")
+                        .HasColumnType("int")
+                        .HasColumnName("calculator_run_id");
+
+                    b.Property<decimal?>("InvoicedNetTonnage")
+                        .HasMaxLength(4000)
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)")
+                        .HasColumnName("invoiced_net_tonnage");
+
+                    b.Property<int>("MaterialId")
+                        .HasColumnType("int")
+                        .HasColumnName("material_id");
+
+                    b.Property<int>("ProducerId")
+                        .HasColumnType("int")
+                        .HasColumnName("producer_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CalculatorRunId");
+
+                    b.HasIndex("MaterialId");
+
+                    b.ToTable("producer_invoiced_material_net_tonnage", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.ProducerReportedMaterial", b =>
@@ -1474,7 +1625,106 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasIndex("ProducerDetailId");
 
-                    b.ToTable("producer_reported_material");
+                    b.ToTable("producer_reported_material", (string)null);
+                });
+
+            modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.ProducerResultFileSuggestedBillingInstruction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal?>("AmountLiabilityDifferenceCalcVsPrev")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("amount_liability_difference_calc_vs_prev");
+
+                    b.Property<string>("BillingInstructionAcceptReject")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnName("billing_instruction_accept_reject");
+
+                    b.Property<int>("CalculatorRunId")
+                        .HasColumnType("int")
+                        .HasColumnName("calculator_run_id");
+
+                    b.Property<decimal?>("CurrentYearInvoiceTotalToDate")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("current_year_invoice_total_to_date");
+
+                    b.Property<DateTime?>("LastModifiedAcceptReject")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("last_modified_accept_reject");
+
+                    b.Property<string>("LastModifiedAcceptRejectBy")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("last_modified_accept_reject_by");
+
+                    b.Property<string>("MaterialPercentageThresholdBreached")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnName("material_percentage_threshold_breached");
+
+                    b.Property<string>("MaterialPoundThresholdBreached")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnName("material_pound_threshold_breached");
+
+                    b.Property<decimal?>("PercentageLiabilityDifferenceCalcVsPrev")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("percentage_liability_difference_calc_vs_prev");
+
+                    b.Property<int>("ProducerId")
+                        .HasColumnType("int")
+                        .HasColumnName("producer_id");
+
+                    b.Property<string>("ReasonForRejection")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnName("reason_for_rejection");
+
+                    b.Property<string>("SuggestedBillingInstruction")
+                        .IsRequired()
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnName("suggested_billing_instruction");
+
+                    b.Property<decimal>("SuggestedInvoiceAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("suggested_invoice_amount");
+
+                    b.Property<string>("TonnageChangeSinceLastInvoice")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnName("tonnage_change_since_last_invoice");
+
+                    b.Property<string>("TonnagePercentageThresholdBreached")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnName("tonnage_percentage_threshold_breached");
+
+                    b.Property<string>("TonnagePoundThresholdBreached")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnName("tonnage_pound_threshold_breached");
+
+                    b.Property<decimal>("TotalProducerBillWithBadDebt")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("total_producer_bill_with_bad_debt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CalculatorRunId");
+
+                    b.ToTable("producer_resultfile_suggested_billing_instruction", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.SubmissionPeriodLookup", b =>
@@ -1513,7 +1763,7 @@ namespace EPR.Calculator.API.Data.Migrations
 
                     b.HasKey("SubmissionPeriod");
 
-                    b.ToTable("submission_period_lookup");
+                    b.ToTable("submission_period_lookup", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.CalculatorRun", b =>
@@ -1555,6 +1805,17 @@ namespace EPR.Calculator.API.Data.Migrations
                     b.Navigation("Financial_Year");
 
                     b.Navigation("LapcapDataMaster");
+                });
+
+            modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.CalculatorRunBillingFileMetadata", b =>
+                {
+                    b.HasOne("EPR.Calculator.API.Data.DataModels.CalculatorRun", "CalculatorRun")
+                        .WithMany("CalculatorRunBillingFileMetadata")
+                        .HasForeignKey("CalculatorRunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CalculatorRun");
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.CalculatorRunCsvFileMetadata", b =>
@@ -1677,6 +1938,15 @@ namespace EPR.Calculator.API.Data.Migrations
                     b.Navigation("ProjectionYear");
                 });
 
+            modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.ProducerDesignatedRunInvoiceInstruction", b =>
+                {
+                    b.HasOne("EPR.Calculator.API.Data.DataModels.CalculatorRun", null)
+                        .WithMany("ProducerDesignatedRunInvoiceInstruction")
+                        .HasForeignKey("CalculatorRunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.ProducerDetail", b =>
                 {
                     b.HasOne("EPR.Calculator.API.Data.DataModels.CalculatorRun", "CalculatorRun")
@@ -1686,6 +1956,21 @@ namespace EPR.Calculator.API.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("CalculatorRun");
+                });
+
+            modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.ProducerInvoicedMaterialNetTonnage", b =>
+                {
+                    b.HasOne("EPR.Calculator.API.Data.DataModels.CalculatorRun", null)
+                        .WithMany("ProducerInvoicedMaterialNetTonnage")
+                        .HasForeignKey("CalculatorRunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EPR.Calculator.API.Data.DataModels.Material", null)
+                        .WithMany("ProducerInvoicedMaterialNetTonnage")
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.ProducerReportedMaterial", b =>
@@ -1707,11 +1992,28 @@ namespace EPR.Calculator.API.Data.Migrations
                     b.Navigation("ProducerDetail");
                 });
 
+            modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.ProducerResultFileSuggestedBillingInstruction", b =>
+                {
+                    b.HasOne("EPR.Calculator.API.Data.DataModels.CalculatorRun", null)
+                        .WithMany("ProducerResultFileSuggestedBillingInstruction")
+                        .HasForeignKey("CalculatorRunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.CalculatorRun", b =>
                 {
+                    b.Navigation("CalculatorRunBillingFileMetadata");
+
                     b.Navigation("CountryApportionments");
 
+                    b.Navigation("ProducerDesignatedRunInvoiceInstruction");
+
                     b.Navigation("ProducerDetails");
+
+                    b.Navigation("ProducerInvoicedMaterialNetTonnage");
+
+                    b.Navigation("ProducerResultFileSuggestedBillingInstruction");
                 });
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.CalculatorRunClassification", b =>
@@ -1773,6 +2075,8 @@ namespace EPR.Calculator.API.Data.Migrations
 
             modelBuilder.Entity("EPR.Calculator.API.Data.DataModels.Material", b =>
                 {
+                    b.Navigation("ProducerInvoicedMaterialNetTonnage");
+
                     b.Navigation("ProducerReportedMaterials");
                 });
 
