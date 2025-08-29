@@ -156,7 +156,7 @@ steps:
     displayName: "Package Restore"
     inputs:
       command: 'restore'
-      restoreSolution: 'src/EPR.Calculator.API.Data.sln'
+      restoreSolution: '**/*.sln'
       feedsToUse: 'select'
 
   - task: DotNetCoreCLI@2
@@ -179,7 +179,7 @@ steps:
     displayName: 'Build Project'
     inputs:
       command: build
-      projects: 'src/EPR.Calculator.API.Data/EPR.Calculator.API.Data.csproj'
+      projects: 'src/${{ parameters.projectFolder }}/${{ parameters.projectName }}.csproj'
       arguments: '--configuration $(configuration)'
 
   - task: NuGetCommand@2
@@ -187,7 +187,7 @@ steps:
     inputs:
       command: 'pack'
       arguments: '--configuration $(configuration) --no-build'
-      packagesToPack: '${{parameters.solutionFolder}}/${{parameters.projectName}}/${{parameters.projectName}}.csproj'
+      packagesToPack: '${{ parameters.solutionFolder }}/${{ parameters.projectName }}/${{ parameters.projectName }}.csproj'
       versioningScheme: $(versioningScheme)
       versionEnvVar: Build.BuildNumber
 
@@ -196,7 +196,7 @@ steps:
     inputs:
       command: 'push'
       feedsToUse: 'select'
-      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*${{parameters.projectName}}*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*${{parameters.projectName}}*.symbols.nupkg'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*${{ parameters.projectName }}*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*${{ parameters.projectName }}*.symbols.nupkg'
       nuGetFeedType: 'internal'
       publishVstsFeed: 'RWD-CPR-EPR4P-ADO/defra-epr-common'
       allowPackageConflicts: true
